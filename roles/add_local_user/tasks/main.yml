@@ -1,0 +1,14 @@
+- name: "Getting current group names"
+  shell: groups | cut -f 2- -d " " | tr ' ' ','
+  become: false
+  register: group_members
+
+- name: "Create new user named {{ raspi_user }}"
+  user:
+    name: "{{ raspi_user }}"
+    password: "{{ secret_password | password_hash('sha512') }}"
+    groups: "{{ group_members.stdout }}"
+    shell: /bin/bash
+    append: yes
+    update_password: on_create
+

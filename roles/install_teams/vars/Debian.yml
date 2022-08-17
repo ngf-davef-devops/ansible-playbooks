@@ -1,0 +1,4 @@
+---
+teams_repo_path: https://packages.microsoft.com/repos/ms-teams stable main
+teams_gpg_path: https://packages.microsoft.com/keys/microsoft.asc
+teams_gpg_key: /usr/share/keyrings/microsoft-teams-keyring.gpg

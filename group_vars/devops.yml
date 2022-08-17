@@ -1,0 +1,9 @@
+---
+python3_packages: [ 'python3' ]
+pip_package: [ 'python3-pip' ]
+pip_executable: "{{ 'pip3' }}"
+pip_install_packages: ['ansible', 'Pywinrm', 'Pywinrm[credssp]', 'cryptography', 'bcrypt', 'storm', 'stormssh' ]
+awscli_users: []
+basic_packages: [ 'wget', 'curl', 'vim', 'git', 'vifm', 'nano', 'tmux', 'lolcat', 'fortune-mod', 'fortunes-min' ]
+to_fix_packages: [ 'draw.io', 'lutris', 'steam', 'rpi-imager' ]
+extra_packages: [ 'pandoc', 'remmina', 'remmina-plugin-rdp', 'remmina-plugin-secret', 'remmina-plugin-vnc', 'sshpass', 'yubikey-manager', 'fonts-font-awesome', 'fonts-firacode', 'fonts-hack-ttf', 'ttf-anonymous-pro' ]

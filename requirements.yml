@@ -1,0 +1,11 @@
+---
+roles:
+  - name: darkwizard242.onepassword
+  - name: darkwizard242.azurecli
+  - name: darkwizard242.vscode
+  - name: tommarshall.awscli
+  - name: gantsign.git_credential_manager
+  - name: weareinteractive.ufw
+
+collections:
+  - name: enmanuelmoreira.hashicorp

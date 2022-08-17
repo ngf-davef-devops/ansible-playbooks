@@ -1,0 +1,32 @@
+---
+- name: Check if docker installed
+  shell: dpkg-query -W "{{ docker_package_name }}"
+  ignore_errors: True
+  register: installed_docker
+
+- name: Install docker repository key
+  apt_key:
+    url: "{{ docker_gpg_path }}"
+    keyring: "{{ docker_gpg_key }}"
+    state: present
+  when: installed_docker is failed
+
+- name: Add docker repository
+  apt_repository:
+    repo: deb [arch={{ apt_repo_arch_type[ansible_architecture] }} signed-by={{ docker_gpg_key }}] {{ docker_repo_path }}
+    state: present
+  when: installed_docker is failed
+
+- name: Install docker package
+  apt:
+    name:
+    - "{{ docker_package_name }}"
+    - python3-pip
+    update_cache: yes
+    force_apt_get: yes
+  when: installed_docker is failed
+
+- name: Install pip docker
+  pip:
+    name: docker
+  when: installed_docker is failed

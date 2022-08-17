@@ -1,0 +1,65 @@
+---
+dotfiles_repo_local_destination: "{{ ansible_user_dir }}/.dotfiles"
+dotfiles_repo: "https://github.com/fishd72/Dotfiles.git"
+dotfiles_repo_version: master
+dotfiles_repo_accept_hostkey: false
+
+dotfiles_home: "~"
+dotfiles_directories:
+  - .config/vifm/colors
+  - .config/lxterminal
+  - .vim/colors
+dotfiles_files:
+  - .aliases
+  - .bash_env
+  - .bash_logout
+  - .bashrc
+  - .config/lxterminal/lxterminal.conf
+  - .config/vifm/vifmrc
+  - .config/vifm/colors/palenight.vifm
+  - .dir_colors
+  - .gitconfig
+  - .gitconfig-linux
+  - .gitconfig-macos
+  - .gitconfig-personal
+  - .gitconfig-corporate
+  - .gitignore
+  - .hushlogin
+  - .inputrc
+  - .nanorc
+  - .profile
+  - .vim/colors/nord.vim
+  - .vimrc
+  - .zprofile
+  - .zshrc
+
+basic_packages: [ 'wget', 'curl', 'vim', 'git', 'vifm', 'nano', 'tmux' ]
+
+# Code to work out correct Debian repo Architectures.
+# Use {{ apt_repo_arch_type[ansible_architecture] }} instead of [arch=amd64]
+
+apt_repo_arch_type:
+  x86_64: amd64
+  ia64: amd64
+  aarch64: arm64
+  armv6l: armel
+  armv7l: armhf
+
+# Code to work out correct Linux Mint repositories.
+# Use {{ apt_repo_mint_fix[ansible_distribution_release] }} instead of [ansible_lsb_codename]
+
+apt_repo_mint_fix:
+  una: focal
+  uma: focal
+  ulyssa: focal
+  ulyana: focal
+  tricia: bionic
+  tina: bionic
+  tessa: bionic
+  tara: bionic
+  elsie: bullseye
+  debbie: buster
+  focal: focal
+  bionic: bionic
+  bullseye: bullseye
+  buster: buster

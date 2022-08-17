@@ -1,0 +1,10 @@
+- name: Ensure Pip is installed
+  apt:
+    pkg: "{{ pip_package }}"
+    state: present
+
+- name: Install Ansible & winrm packages
+  pip:
+    name: '{{ pip_install_packages }}'
+    state: present
+    executable: "{{ pip_executable }}"

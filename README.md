@@ -1,2 +1,3 @@
 # ansible-playbooks
-Collection of ansible playbooks I use
+
+A collection of ansible playbooks I use

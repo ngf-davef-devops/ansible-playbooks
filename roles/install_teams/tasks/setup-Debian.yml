@@ -1,0 +1,24 @@
+---
+- name: Ensure dependencies are installed.
+  ansible.builtin.apt:
+    name:
+      - gpg-agent
+    state: present
+    update_cache: yes
+
+- name: Add the Microsoft Teams GPG Key
+  ansible.builtin.apt_key:
+    url: "{{ teams_gpg_path }}"
+    keyring: "{{ teams_gpg_key }}"
+
+- name: Add Microsoft Teams Repository
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by={{ teams_gpg_key }}] {{ teams_repo_path }}
+    filename: teams
+    state: present
+
+- name: Ensure Microsoft Teams is installed.
+  ansible.builtin.apt:
+    name: "{{ teams_package_name }}"
+    state: "{{ teams_package_state }}"
+    update_cache: yes

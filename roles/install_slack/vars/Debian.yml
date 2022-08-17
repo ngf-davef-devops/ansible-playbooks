@@ -1,0 +1,4 @@
+---
+slack_repo_path: https://packagecloud.io/slacktechnologies/slack/debian/ jessie main
+slack_gpg_path: https://packagecloud.io/slacktechnologies/slack/gpgkey
+slack_gpg_key: /usr/share/keyrings/slack-archive-keyring.gpg

@@ -1,0 +1,131 @@
+---
+- hosts: all!wsl
+
+  vars_files:
+    - passwd.yml
+
+  tasks:
+    - name: Secure SSH server
+      become: true
+      import_role:
+        name: config_sshd
+      tags: ssh
+
+    - name: Change hostname
+      become: true
+      import_role:
+        name: change_hostname
+      when: ansible_hostname != inventory_hostname_short
+      tags: hostname
+
+    - name: Remove default user accounts
+      become: true
+      import_role:
+        name: remove_default_user
+      tags: user
+
+- hosts: all
+
+  vars_files:
+    - passwd.yml
+
+  tasks:
+    - name: Upgrade apt cache and installed apps
+      become: true
+      import_role:
+        name: apt_upgrade
+      tags: update
+
+    - name: Install key software
+      become: true
+      import_role:
+        name: install_basics
+      tags: software
+
+    - name: Copy dotfiles from github
+      import_role:
+        name: install_dotfiles
+      tags: dotfiles
+
+#    - name: Configure firewall - needs converting to Galaxy Role
+#      become: true
+#      import_role:
+#        name: configure_ufw
+#      tags: firewall
+
+- hosts: devops
+
+  vars_files:
+    - passwd.yml
+
+  become: true
+
+  roles:
+     - { role: tommarshall.awscli }
+     - { role: darkwizard242.azurecli }
+     - { role: terraform }
+
+  pre_tasks:
+    - name: Installing Ansible
+      import_role:
+        name: install_ansible
+      tags: ansible
+
+- hosts: desktops
+
+  vars_files:
+    - passwd.yml
+
+  tasks:
+    - name: Install latest graphics libraries
+      become: true
+      import_role:
+        name: install_mesa
+      tags: graphics
+
+    - name: Install Signal Desktop
+      become: true
+      import_role:
+        name: install_signal
+      tags: signal
+
+    - name: Install Slack Desktop
+      become: true
+      import_role:
+        name: install_slack
+      tags: slack
+
+    - name: Install Keybase
+      become: true
+      import_role:
+        name: install_keybase
+      tags: keybase
+
+    - name: Install 1Password
+      become: true
+      import_role:
+        name: darkwizard242.onepassword
+      tags: 1password
+
+    - name: Install git Credential Manager
+      become: true
+      import_role: 
+        name: gantsign.git_credential_manager
+      tags: git
+
+    - name: Install Microsoft Teams
+      become: true
+      import_role:
+        name: install_teams
+      tags: teams
+
+    - name: Install VS Code
+      become: true
+      import_role:
+        name: darkwizard242.vscode
+      tags: vscode
+
+    - name: Configure VS Code
+      import_role:
+        name: config_vscode
+      tags: config_vscode

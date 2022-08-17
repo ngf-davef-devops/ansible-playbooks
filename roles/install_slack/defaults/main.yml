@@ -1,0 +1,3 @@
+---
+slack_package_name: slack-desktop
+slack_package_state: present

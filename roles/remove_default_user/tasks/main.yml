@@ -1,0 +1,10 @@
+---
+- name: Remove default users
+  become: yes
+  user:
+    name: "{{ item }}"
+    state: absent
+    remove: yes
+  loop:
+    - pi
+    - ubuntu

@@ -1,0 +1,104 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars_prompt:
+  - name: device_hostname
+    prompt: "What is the device hostname?"
+    private: no
+
+  - name: key_passphrase
+    prompt: "What key passphrase would you like to use?"
+    private: yes
+
+  vars:
+    ssh_key_filename: "{{ device_hostname }}_ed25519"
+
+  vars_files:
+    - passwd.yml
+
+  tasks:
+    - name: gather facts from target
+      ansible.builtin.setup:
+      delegate_to: "{{ device_hostname }}"
+      delegate_facts: true
+
+    - name: generate SSH key {{ ssh_key_filename }}
+      community.crypto.openssh_keypair:
+        path: ~/.ssh/{{ ssh_key_filename }}
+        type: ed25519
+        state: present
+        passphrase: "{{ key_passphrase }}"
+        force: no
+
+    - name: add a host in the configuration
+      community.general.ssh_config:
+        user: fishd
+        group: "{{ 'wheel' if ansible_os_family == 'Darwin' else '{{ansible_user}}' }}"
+        host: "{{ device_hostname }}"
+        hostname:  "{{ hostvars[device_hostname].ansible_host }}"
+        identity_file: ~/.ssh/{{ ssh_key_filename }}
+        port: '22'
+        state: present
+
+    - name: fetch public ssh key
+      slurp:
+        src: ~/.ssh/{{ ssh_key_filename }}.pub
+      register: ssh_public_key
+
+    - name: update local known_hosts file
+      known_hosts:
+        key: "{{ lookup('pipe', 'ssh-keyscan -trsa ' + device_hostname + ' ' + hostvars[device_hostname].ansible_host) }}"
+        name: "{{ device_hostname }}"
+        state: present
+
+- hosts: all,!localhost
+  become: true
+  gather_facts: yes
+
+  vars_prompt:
+  - name: connect_username
+    prompt: "What is the connection username?"
+    private: no
+
+  - name: connect_password
+    prompt: "What is the connection password?"
+    private: yes
+
+  vars:
+    ansible_user: "{{ connect_username }}"
+    ansible_password: "{{ connect_password }}"
+    ansible_become_password: "{{ connect_password }}"
+
+  vars_files:
+    - passwd.yml
+
+  tasks:
+    - name: "Create new user named {{ raspi_user }} if needed"
+      import_role:
+        name: add_local_user
+      when: "'connect_username' != 'raspi_user'"
+
+#    - name: allow passwordless sudo
+#      lineinfile:
+#        path: /etc/sudoers
+#        state: present
+#        regexp: '^%sudo'
+#        line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+#        validate: 'visudo -cf %s'
+
+    - name: adding existing user '{{ raspi_user }}' to group sudo
+      user:
+        name: '{{ raspi_user }}'
+        groups: sudo
+        append: yes
+
+    - name: Debug variables
+      debug: var=hostvars['localhost']['ssh_public_key']
+      when: hostvars['localhost']['ssh_public_key'] is defined
+
+    - name: Set ssh authorized key for user '{{ raspi_user }}'
+      authorized_key:
+        user: "{{ raspi_user }}"
+        state: present
+        key: "{{ hostvars['localhost']['ssh_public_key']['content'] | b64decode }}"

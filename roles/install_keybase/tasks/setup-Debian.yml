@@ -1,0 +1,24 @@
+---
+- name: Ensure dependencies are installed.
+  ansible.builtin.apt:
+    name:
+      - gpg-agent
+    state: present
+    update_cache: yes
+
+- name: Add the keybase GPG Key
+  ansible.builtin.apt_key:
+    url: "{{ keybase_gpg_path }}"
+    keyring: "{{ keybase_gpg_key }}"
+
+- name: Add keybase Repository
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by={{ keybase_gpg_key }}] {{ keybase_repo_path }}
+    filename: keybase
+    state: present
+
+- name: Ensure keybase is installed.
+  ansible.builtin.apt:
+    name: "{{ keybase_package_name }}"
+    state: "{{ keybase_package_state }}"
+    update_cache: yes
