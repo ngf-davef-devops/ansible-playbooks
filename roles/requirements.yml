@@ -1,0 +1,7 @@
+---
+roles:
+  - name: darkwizard242.azurecli
+  - name: tommarshall.awscli
+
+collections:
+  - name: enmanuelmoreira.hashicorp

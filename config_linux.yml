@@ -77,55 +77,9 @@
     - passwd.yml
 
   tasks:
-    - name: Install latest graphics libraries
-      become: true
-      import_role:
-        name: install_mesa
-      tags: graphics
-
-    - name: Install Signal Desktop
-      become: true
-      import_role:
-        name: install_signal
-      tags: signal
-
-    - name: Install Slack Desktop
-      become: true
-      import_role:
-        name: install_slack
-      tags: slack
-
-    - name: Install Keybase
-      become: true
-      import_role:
-        name: install_keybase
-      tags: keybase
-
-    - name: Install 1Password
-      become: true
-      import_role:
-        name: darkwizard242.onepassword
-      tags: 1password
-
-    - name: Install git Credential Manager
-      become: true
-      import_role: 
-        name: gantsign.git_credential_manager
-      tags: git
-
     - name: Install Microsoft Teams
       become: true
       import_role:
         name: install_teams
       tags: teams
 
-    - name: Install VS Code
-      become: true
-      import_role:
-        name: darkwizard242.vscode
-      tags: vscode
-
-    - name: Configure VS Code
-      import_role:
-        name: config_vscode
-      tags: config_vscode

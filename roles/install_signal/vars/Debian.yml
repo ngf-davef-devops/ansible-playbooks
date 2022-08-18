@@ -1,4 +1,0 @@
----
-signal_repo_path: https://updates.signal.org/desktop/apt xenial main
-signal_gpg_path: https://updates.signal.org/desktop/apt/keys.asc
-signal_gpg_key: /usr/share/keyrings/signal-desktop-keyring.gpg

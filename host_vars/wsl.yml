@@ -1,0 +1,3 @@
+---
+ansible_connection: local
+become_password: "{{ wsl_become_pass }}"

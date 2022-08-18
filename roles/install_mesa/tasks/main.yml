@@ -1,5 +1,0 @@
-- name: Include Debian specific OS variables
-  include_vars: "Debian.yml"
-
-- include_tasks: setup-Debian.yml
-  when: (ansible_os_family == 'Debian')
